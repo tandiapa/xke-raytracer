@@ -38,21 +38,21 @@ public class Camera implements Object3d {
         this.pixelsPerRow = pixelsPerRow;
         this.pixelsPerColumn = (int) Math.floor(this.pixelsPerRow * (1 / aspectRatio));
 
-        this.width = 0; //TODO: Fix Me
-        this.height = 0; //TODO: Fix Me
+        this.width = 2 * nearClipping * Math.tan(fov / 2);
+        this.height = this.width * (1 / aspectRatio);
 
 
-        singlePixelWidth = 0; //TODO: Fix Me
-        singlePixelHeight = 0;//TODO: Fix Me
+        singlePixelWidth = width / pixelsPerRow;
+        singlePixelHeight = height / pixelsPerColumn;
 
-        U = null; //TODO: Fix Me
-        V = null; //TODO: Fix Me
+        U = up.cross(viewDirection).opposite();
+        V = up.opposite();
         upperLeftCorner = upperLeftCornerWorldPosition();
     }
 
     private Vector3 upperLeftCornerWorldPosition() {
-        //TODO: Fix Me
-        return null;
+        Vector3 rectCenter = eye.add(viewDirection.times(nearClipping));
+        return rectCenter.add(U.times(-width/2)).add(V.times(-height/2));
     }
 
     public Vector3 pixelWorldPosition(int row, int col) {

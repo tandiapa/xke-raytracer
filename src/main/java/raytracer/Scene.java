@@ -68,8 +68,19 @@ public class Scene {
      * @return a populated optional if a Surface has been found, empty otherwise
      */
     public Optional<Hit> castRay(Vector3 origin, Vector3 direction) {
-        //TODO: Fix Me
-        return null;
+        Optional<Hit> minHit = Optional.empty();
+
+        for(Surface surface: this.surfaces) {
+            Optional<Double> hitDistance = surface.hitBy(origin, direction);
+            if(hitDistance.isPresent() && hitDistance.get() > 0) {
+                if(minHit.isPresent() && minHit.get().t < hitDistance.get()) {
+                    continue;
+                }
+
+                minHit = Optional.of(new Hit(hitDistance.get(), surface));
+            }
+        }
+        return minHit;
     }
 
     /**
@@ -81,8 +92,21 @@ public class Scene {
      */
     public Color castRayColor(Vector3 origin, Vector3 direction) {
         Optional<Hit> hit = castRay(origin, direction);
-        //TODO: Fix Me
-        return null;
+        if(hit.isPresent()) {
+            Surface hitSurface = hit.get().surface;
+            Vector3 hitPoint = origin.add(direction.times(hit.get().t));
+
+            Color res = hit.get().surface.getAmbientColor().times(this.ambientLightIntensity);
+
+            for(Light light: this.lights) {
+                Color lightContribution = light.contribution(hitPoint, hitSurface, this);
+                res = res.add(lightContribution);
+            }
+
+            return res;
+        } else {
+            return this.backgroundColor;
+        }
     }
 
 }

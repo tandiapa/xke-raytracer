@@ -22,8 +22,18 @@ public class Sphere implements Surface {
 
     @Override
     public Optional<Double> hitBy(Vector3 rayOrigin, Vector3 rayDirection) {
-        //TODO: Fix Me
-        return null;
+        Vector3 oc = rayOrigin.minus(center);
+
+        double b = 2 * oc.dot(rayDirection);
+        double c =  oc.length() * oc.length() - radius * radius;
+
+        double delta = b * b - 4 * c;
+
+        if(delta >= 0) {
+            return Optional.of((- b - Math.sqrt(delta)) / 2);
+        } else {
+            return Optional.empty();
+        }
     }
 
     public Color getAmbientColor() {
@@ -40,7 +50,6 @@ public class Sphere implements Surface {
 
     @Override
     public Vector3 normalAt(Vector3 position) {
-        //TODO: Fix Me
-        return null;
+        return position.minus(center).normalize();
     }
 }

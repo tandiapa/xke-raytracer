@@ -56,8 +56,7 @@ public class Vector3 {
     }
 
     public Vector3 normalize() {
-        //1: TODO
-        return null;
+        return times(1 / length());
     }
 
     public Vector3 cross(Vector3 rhs) {
@@ -68,8 +67,7 @@ public class Vector3 {
     }
 
     public double dot(Vector3 rhs) {
-        //2: TODO
-        return 0;
+        return this.x * rhs.x + this.y * rhs.y + this.z * rhs.z;
     }
 
     @Override

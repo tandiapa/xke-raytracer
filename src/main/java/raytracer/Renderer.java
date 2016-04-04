@@ -16,9 +16,12 @@ public class Renderer {
         // while the number of pixels per row gives us the number of columns
         for(int row = 0; row < scene.camera.pixelsPerColumn; row++)
         for(int column = 0; column < scene.camera.pixelsPerRow; column++) {
-            //TODO: Fix Me
+            Vector3 pixelWorldPos = scene.camera.pixelWorldPosition(row, column);
+            Vector3 rayDirection = pixelWorldPos.minus(scene.camera.eye).normalize();
 
-            imgBuffer.putPixel(row, column, color(0.0f, 1.0f, 0.0f));
+            Color res = scene.castRayColor(pixelWorldPos, rayDirection);
+
+            imgBuffer.putPixel(row, column, res);
         }
     }
 
